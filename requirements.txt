@@ -1,4 +1,12 @@
 fastapi
 uvicorn
 newspaper3k
+newspaper
 lxml_html_clean
+requests
+dotenv
+pydantic
+typing
+langchain
+langchain_core
+langchain_google_genai

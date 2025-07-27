@@ -1,6 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from config.constants import API_VERSION
+from config.constants.constant import API_VERSION, URLs
+from config.schema.prompt_templates import top_insights_prompt, top_news_prompt
+from src.models import news_llm, insight_llm
+from src.news_collection import news_collector
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 app = FastAPI(
     title="AI-Powered Financial News and Insights API",
@@ -28,4 +35,41 @@ def health():
 
 @app.get("/get_top_news")
 def get_top_news():
-    pass
+    
+    news_data = news_collector(url_dict=URLs)
+    
+    if not news_data:
+        raise HTTPException(status_code=404,detail="Unable to fetch news data")
+
+    try:
+        model = top_news_prompt | news_llm
+
+        response = model.invoke(news_data).top_news
+
+        return response
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"An error occurred: {str(e)}"}
+        )
+    
+
+@app.get("/get_news_insight")
+def get_insight():
+    
+    news_data = news_collector(url_dict=URLs)
+    
+    if not news_data:
+        raise HTTPException(status_code=404,detail="Unable to fetch news data")
+
+    try:
+        model = top_insights_prompt | insight_llm
+        response = model.invoke(news_data)
+
+        return response
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"An error occurred: {str(e)}"}
+        )
+    
