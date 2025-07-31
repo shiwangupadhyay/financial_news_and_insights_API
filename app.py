@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from config.constants.constant import API_VERSION, URLs
 from config.schema.prompt_templates import top_insights_prompt, top_news_prompt
@@ -14,6 +15,15 @@ app = FastAPI(
     version=API_VERSION,
     description="Get summarized financial news and market insights generated using Gen AI"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/", status_code=200)
 def root():
