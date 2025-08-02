@@ -8,3 +8,11 @@ URLs = {
     "livemint_markets": "https://www.livemint.com/rss/markets",
     "cnbc": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
 }
+
+SYMBOLS = {
+    "NIFTY 50": "^NSEI",
+    "SENSEX": "^BSESN",
+    "BANK NIFTY": "^NSEBANK",
+    "NIFTY MIDCAP": "^NSEMDCP50",
+    "USD/INR": "USDINR=X"
+}
