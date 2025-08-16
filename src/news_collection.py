@@ -1,20 +1,8 @@
 from newspaper import Article
 import feedparser
 import requests
-from config.constants.constant import URLs
-
 
 def news_collector(url_dict: dict) -> list[dict]:
-    """
-    This function collects news articles with their title and other metadata from different news sites.
-
-    Args:
-        url_dict (dict): a dictionary of RSS URLs of different news sites keyed by name of source.
-
-    Returns:
-        list[dict]: list containing different news articles with metadata, each news is combined as a dictionary.
-    """
-
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
@@ -26,6 +14,8 @@ def news_collector(url_dict: dict) -> list[dict]:
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 feed = feedparser.parse(response.content)
+                print(f"[{source}] Feed entries: {len(feed.entries)}")
+
                 for entry in feed.entries[:10]:
                     article_info = {
                         "source": source,
@@ -41,11 +31,13 @@ def news_collector(url_dict: dict) -> list[dict]:
                         article_info["content"] = article.text.strip()
                     except Exception as e:
                         article_info["content"] = "Failed to parse article."
+                        print(f"[{source}] Failed to parse article: {e}")
 
                     news_data.append(article_info)
             else:
-                return "failed to fetch news data"
+                print(f"[{source}] HTTP status not OK: {response.status_code}")
         except Exception as e:
-            return f"Error fetching/parsing {source}: {e}"
-    
+            print(f"[{source}] Error fetching/parsing feed: {e}")
+            continue  # Don't return, just skip this feed
+
     return news_data
