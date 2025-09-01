@@ -13,6 +13,9 @@ SYMBOLS = {
     "NIFTY 50": "^NSEI",
     "SENSEX": "^BSESN",
     "BANK NIFTY": "^NSEBANK",
-    "NIFTY MIDCAP": "^NSEMDCP50",
-    "USD/INR": "USDINR=X"
+    "NIFTY MIDCAP 50": "^NSEMDCP50",
+    "NIFTY IT": "^CNXIT",
+    "NIFTY PHARMA": "^CNXPHARMA",
+    "INDIA VIX": "^INDIAVIX",
+    "USD/INR": "USDINR=X",
 }
